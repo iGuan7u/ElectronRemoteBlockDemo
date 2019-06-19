@@ -1,7 +1,7 @@
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
-function startAction() {
+function startRemoteAction() {
     const { remote } = require('electron')
 
     console.log(`request get function ${Date.now()}`)
@@ -25,6 +25,11 @@ function startAction() {
     console.log(`request literate values End ${Date.now()}`)
 }
 
+function startIPCAction() {
+    const { ipcRenderer } = require('electron')
+    ipcRenderer.send('blockTheMainProcess')
+}
+
 const divElement = document.createElement('div')
 divElement.innerHTML = `We are using Node.js ${process.versions.node},
 Chromium ${process.versions.chrome},
@@ -46,6 +51,16 @@ document.body.appendChild(buttonContainerElement)
 
 const buttonElement = document.createElement('button')
 buttonElement.setAttribute('class', 'button')
-buttonElement.onclick = startAction
+buttonElement.onclick = startRemoteAction
 buttonElement.innerHTML = 'RemoteAction'
 buttonContainerElement.appendChild(buttonElement)
+
+const buttonContainerElement2 = document.createElement('div')
+buttonContainerElement2.setAttribute('class', 'button_cnt')
+document.body.appendChild(buttonContainerElement2)
+
+const buttonElement2 = document.createElement('button')
+buttonElement2.setAttribute('class', 'button')
+buttonElement2.onclick = startIPCAction
+buttonElement2.innerHTML = 'IPCAction'
+buttonContainerElement2.appendChild(buttonElement2)

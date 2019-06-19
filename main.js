@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -18,6 +18,13 @@ function createObjects () {
   return returnObjects
 }
 
+function blockTheMainProcess() {
+  console.log('now start block the main process')
+  while(1) {
+    // block main process
+  }
+}
+
 function createWindow () {
   global.mainProcessModule = {
     createObjects
@@ -30,6 +37,8 @@ function createWindow () {
       nodeIntegration: true
     }
   })
+
+  ipcMain.on('blockTheMainProcess', blockTheMainProcess)
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
